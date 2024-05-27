@@ -63,15 +63,16 @@ export const login = catchAsyncError( async(req,res,next)=>{
 
 //logout controller
 export const logout = catchAsyncError(async (req,res,next)=>{
-    res.status(201).cookie("token",null,{
+    res.status(200).clearCookie("token",null,{
         httpOnly: true,
-        expires: new Date(Date.now()),
+        secure: true,
     }).json({
         success:true,
         message : "User Logged out Successfully"
     });
 })
-
+// when you specify HTTPOnly attribute in a cookie that means you will not be able access/modify that cookie 
+// with javascript (i.e. with document.cookie property), that cookie can be access/modified by the server only
 
 // forgot pssword
 export const forgotPassword = catchAsyncError(async (req,res,next)=>{
