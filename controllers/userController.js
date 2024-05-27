@@ -63,7 +63,7 @@ export const login = catchAsyncError( async(req,res,next)=>{
 
 //logout controller
 export const logout = catchAsyncError(async (req,res,next)=>{
-    res.status(200).clearCookie("token",null,{
+    res.status(200).clearCookie("token",{
         httpOnly: true,
         secure: true,
     }).json({
