@@ -8,6 +8,7 @@ export const isAuthorized = catchAsyncError(async(req,res,next )=>{
     // req.cookies.token will not work bcoz req.cookies does not contain any nested obj 'token'.
     //  req.cookies is the token itself....
     const token = req.cookies.token;
+    alert(token)
     if(!token){
         return next(new ErrorHandler("User not authorised", 400))
     }
