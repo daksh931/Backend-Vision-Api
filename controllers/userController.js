@@ -30,7 +30,6 @@ export const register = catchAsyncError(async(req,res,next) =>{
         role,
     })
 
-
     // sending (user,statusCode, res, message) values to sendToken()...
     sendToken(user, 201,res, "User registered Successfully!!");
     
@@ -46,6 +45,7 @@ export const login = catchAsyncError( async(req,res,next)=>{
         )
     };
     const user = await User.findOne({email}).select("+password");
+    
     if(!user){
         return next(new ErrorHandler("Invalid Email or Password.", 400));
     }
@@ -56,7 +56,8 @@ export const login = catchAsyncError( async(req,res,next)=>{
     if(!isPasswordMatched){
         return next(new ErrorHandler("Invalid Email or Password", 400));
     }
-
+    user.password = null;
+    // console.log(user)
     sendToken(user,200 , res, "user loggedin Successfully!");
 })
 
@@ -66,7 +67,7 @@ export const logout = catchAsyncError(async (req,res,next)=>{
     res.status(200).clearCookie("token",{
         httpOnly: true,
         secure: true,
-        sameSite: 'none',
+        sameSite: 'none', //'sameSite' bcoz frontend/backend are on different servers (req to set cookies).
     }).json({
         success:true,
         message : "User Logged out Successfully"
@@ -83,28 +84,27 @@ export const forgotPassword = catchAsyncError(async (req,res,next)=>{
         return next(new ErrorHandler("User not found", 404));
     }
 
-    //get ResetPassword Token
+    //get ResetPassword Token from user Schema 
     const resetToken =  await user.getResetPasswordToken();
-    // console.log(resetToken)
 
     await user.save({validateBeforeSave : false});
 
     const resetPasswordUrl = `${process.env.FRONTEND_URL}/password/reset/${user._id}/${resetToken}`;
                 //req.protocol -> means (https or http)
 
-    const message = `Your password reset token is -\n ${resetPasswordUrl}  \n \n If you have not requested this email then. please ignore it `;
+    const message = `Your reset password Link is valid for 15 minutes -\n ${resetPasswordUrl}  \n \n If you have not requested this email then. please ignore it`;
 
     try {
         // options in sendEmail() function are sent
         await sendEmail({
             email : user.email,
-            subject : `Vision Course password recovery`,
+            subject : `Vision Classes password recovery`,
             message
         });
 
         res.status(200).json({
             success:true,
-            message: `Email sent to ${user.email} successfully`,
+            message: `Reset link sent to ${user.email} successfully`,
         })
 
     } 
@@ -125,11 +125,13 @@ export const resetPassword = catchAsyncError(async (req,res,next)=> {
     const token = req.params.token
     // console.log(token)
 
+
     const resetPasswordToken = crypto 
     .createHash("sha256")             
     .update(token)                    
     .digest("hex")                     
 
+    //in user schema resetPasswordToken: {token} is present we are finding that and verifying it..  
     const user = await User.findOne({
         resetPasswordToken:resetPasswordToken,
         resetPasswordExpire : { $gt : Date.now()},  // means resetPasswordExpire should be greater than curr time..
@@ -144,6 +146,7 @@ export const resetPassword = catchAsyncError(async (req,res,next)=> {
     }
 
     user.password = req.body.password;
+    // in end we change below fields to undefined in user schema/model in dbase...
     user.resetPasswordToken = undefined;
     user.resetPasswordExpire = undefined;
 
@@ -151,7 +154,8 @@ export const resetPassword = catchAsyncError(async (req,res,next)=> {
 
     //now logging user after sucessfully password changed! 
 
-    sendToken(user,200,res);
+    sendToken(user,200,res,"Password updated sucessfully");
+    
 
 });
 
