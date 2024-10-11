@@ -4,7 +4,7 @@ import { Course } from "../models/courseSchema.js";
 import { User } from "../models/userSchema.js";
 import {uploadOnCloudinary} from "../utils/Cloudinary.js"
 
-// Get all products 
+// Get all products route
 export const getAllCourses = catchAsyncError( async(req,res,next)=>{
     const courses = await Course.find({});
     res.status(200).json({
@@ -13,7 +13,7 @@ export const getAllCourses = catchAsyncError( async(req,res,next)=>{
     });
 });
 
-// update product
+// update product route
 export const updateCourse = catchAsyncError( async(req,res,next)=>{
     const user = req.user;
     if(user.role === "user"){
