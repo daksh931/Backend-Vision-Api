@@ -6,7 +6,7 @@ const router = express.Router();
 
 router.get("/getcourses",getAllCourses);
 router.post("/postCourse",upload.single("image")
-    , isAuthorized,postCourse);
+    , isAuthorized,isAdmin,postCourse);
 // console.log("router work")
 router.post("/:courseId",isAuthorized,buyCourse);
 router.put("/update/:courseId",isAuthorized,isAdmin,updateCourse);  
