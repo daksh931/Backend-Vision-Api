@@ -10,6 +10,7 @@ import { config } from 'dotenv';
 config({ path: "../config/config.env"}); //connection to env PORT
 
 
+//signup or register 
 export const register = catchAsyncError(async(req,res,next) =>{
     const {name,email, password,phone,role} = req.body;
 
@@ -36,6 +37,7 @@ export const register = catchAsyncError(async(req,res,next) =>{
 });
 
 
+// login 
 export const login = catchAsyncError( async(req,res,next)=>{
     const {email,password} = req.body;
 

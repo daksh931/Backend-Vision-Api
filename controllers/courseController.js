@@ -94,7 +94,7 @@ export const postCourse = catchAsyncError( async(req,res,next)=>{
         course,
     })
 })
-
+    
 // only users can buy courses 
 export const buyCourse = catchAsyncError( async (req,res,next)=>{
     const user = req.cookies.user;
