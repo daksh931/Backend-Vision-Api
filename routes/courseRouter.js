@@ -5,8 +5,8 @@ import { upload } from "../middleware/multermiddleware.js";
 const router = express.Router();
 
 router.get("/getcourses",getAllCourses);
-router.post("/postCourse",upload.single("image")
-    , isAuthorized,isAdmin,postCourse);
+router.post("/postCourse", isAuthorized,isAdmin,upload.single("image")
+,postCourse);
 // console.log("router work")
 router.post("/:courseId",isAuthorized,buyCourse);
 router.put("/update/:courseId",isAuthorized,isAdmin,updateCourse);  
