@@ -93,6 +93,10 @@ export const postCourse = catchAsyncError( async(req,res,next)=>{
     const postedBy = req.user.id;
  
     // image handle on cloudinary
+    if (!req.file) {
+        return next(new ErrorHandler("Image is required for the course", 400));
+    }
+    
     const imagePath= req.file.path;
     const uploadedImage = await uploadOnCloudinary(imagePath);
     // console.log(uploadedImage)
