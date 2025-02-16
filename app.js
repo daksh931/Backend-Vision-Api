@@ -16,7 +16,7 @@ config({ path: "./config/config.env"}); //connection to env PORT
 
 app.use(cors({
     // origin : "http://localhost:5173",
-    origin: [process.env.FRONTEND_URL],
+    origin: [process.env.FRONTEND_URL.split(",")],
     methods: ['GET','POST','DELETE','PUT'],
     credentials : true,
 }))
