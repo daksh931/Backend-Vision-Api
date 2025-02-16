@@ -13,10 +13,17 @@ const app = express();
 config({ path: "./config/config.env"}); //connection to env PORT
 
 // console.log(process.env.FRONTEND_URL)
-
+const allowedOrigins = process.env.FRONTEND_URL.split(",");
 app.use(cors({
     // origin : "http://localhost:5173",
-    origin: [process.env.FRONTEND_URL.split(",")],
+    // origin: [process.env.FRONTEND_URL.split(",")],
+    origin: function (origin, callback) {
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
     methods: ['GET','POST','DELETE','PUT'],
     credentials : true,
 }))
