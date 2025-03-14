@@ -30,26 +30,26 @@ app.get('/', (req, res) => {
     res.send(req.oidc.user);
   });
 
-// app.use(cors({
-//     // origin : "http://localhost:5173",
-//     origin: [process.env.FRONTEND_URL],
-//     methods: ['GET','POST','DELETE','PUT'],
-//     credentials : true,
-// }))
-
-const allowedOrigins = process.env.FRONTEND_URL.split(",");
-
 app.use(cors({
-    origin: function (origin, callback) {
-        if (!origin || allowedOrigins.includes(origin)) {
-            callback(null, true);
-        } else {
-            callback(new Error("Not allowed by CORS"));
-        }
-    },
-    methods: ['GET', 'POST', 'DELETE', 'PUT'],
-    credentials: true,
-}));
+    // origin : "http://localhost:5173",
+    origin: [process.env.FRONTEND_URL],
+    methods: ['GET','POST','DELETE','PUT'],
+    credentials : true,
+}))
+
+// const allowedOrigins = process.env.FRONTEND_URL.split(",");
+
+// app.use(cors({
+//     origin: function (origin, callback) {
+//         if (!origin || allowedOrigins.includes(origin)) {
+//             callback(null, true);
+//         } else {
+//             callback(new Error("Not allowed by CORS"));
+//         }
+//     },
+//     methods: ['GET', 'POST', 'DELETE', 'PUT'],
+//     credentials: true,
+// }));
 
 app.use(cookieParser());
 app.use(express.json()); // parse json neglect other data...
