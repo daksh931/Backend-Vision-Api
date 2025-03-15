@@ -46,16 +46,16 @@ const uploadOnCloudinary = async (localFilePath) => {
 
         console.error("Cloudinary upload failed:", error.message);
 
-    // Delete the file from local storage if upload fails
-    fs.unlink(localFilePath, (err) => {
-      if (err) {
-        console.error("Failed to delete local file after Cloudinary upload failure:", err.message);
-      } else {
-        console.log("Local file deleted after Cloudinary upload failure:", localFilePath);
-      }
-    });
+        // Delete the file from local storage if upload fails
+        fs.unlink(localFilePath, (err) => {
+            if (err) {
+                console.error("Failed to delete local file after Cloudinary upload failure:", err.message);
+            } else {
+                console.log("Local file deleted after Cloudinary upload failure:", localFilePath);
+            }
+        });
 
-    throw error; // Re-throw the error for further handling
+        throw error; // Re-throw the error for further handling
     }
 }
 
